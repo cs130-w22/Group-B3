@@ -2,6 +2,7 @@ const path = require("path");//accesss to file path
 const express = require("express");//access to express
 const multer = require("multer");//access to multer
 const cors = require("cors");// for http
+const port = 5000;
 
 const application = express();
 
@@ -31,4 +32,6 @@ application.post("/multiple", upload.any("images"), (req, res) => {
 	res.send("Files Uploaded");
 });
 //localhost 5000
-application.listen(5000);
+application.listen(port, () => {
+	console.log("Starting server at http://localhost:" + port);
+});

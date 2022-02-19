@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import main
+from .views import handle_post
 
 urlpatterns = [
-    path('crop', main)
+    path('', handle_post)
 ]

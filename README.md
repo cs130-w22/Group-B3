@@ -10,6 +10,10 @@ npm install cors
 
 npm install nodemon
 
+npm install adm-zip
+
+npm install fs
+
 npm run server
 
 On your web browser go on : localhost:5000

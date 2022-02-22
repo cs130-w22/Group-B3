@@ -1,0 +1,132 @@
+body {
+    background-color: rgb (6,26,27);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    
+    max-width: 500px;
+    margin: 60px auto;
+}
+
+/*Background box*/
+.banner {
+    margin: 1px auto;
+    background: -webkit-linear-gradient(-70deg, #3a4d3e 70%, #4e7a58 70%);
+    width: 100%;
+    height: 400px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif;
+    letter-spacing: 1px;
+    font-size: 3em;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    top: 40px;
+    line-height: 0.75;
+}
+    .banner label {
+        font-size: 15px;
+        font-weight: 600;
+        color: gray;
+        text-align: center;
+    }
+
+
+
+
+
+
+
+
+
+/*Drag and Drop Container*/
+.upload-container {
+    position: relative;
+    text-align: center
+}
+
+    .upload-container input {
+        border: 1px solid #92b0b3;
+        background: #f1f1f1;
+        outline: 2px dashed #92b0b3;
+        outline-offset: -10px;
+        width: 94%;
+        height: 90px;
+        font-size: 14px;
+        text-align-last: center;
+        line-height: 5.0;
+        color: #3f8188;
+        margin: auto;
+        font-weight: 900;
+    }
+
+    .upload-container:before {
+        position: absolute;
+        left: 40%;
+        top: 60%;
+        content: " (or) Drag and Drop files here. ";
+        text-align-last: center;
+        text-align: justify;
+        color: #3f8188;
+        font-weight: 900;
+        font-size: 14px;
+    }
+
+        .upload-container input:hover {
+            background: #ddd;
+        }
+
+
+/*The buttons */ 
+.button-wrap{
+    text-align:center;
+}
+.submit-btn {
+    width: 100%;
+    border: none;
+    background: rgb(37, 83, 3);
+    font-size: 18px;
+    color: #e0e0e0;
+    border-radius: 3px;
+    padding: 20px;
+    text-align: center;
+}
+.upload-btn {
+    position: center;
+    width: 150px;
+    background: #e0e0e0;
+    font-size: 18px;
+    font-weight: 200;
+    color: Black;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+/*About us section*/
+.about {
+    position: center;
+    margin: 110px auto;
+    text-align: left;
+    padding-left: 50px;
+    padding-right: 50px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif;
+    letter-spacing: 2px;
+    line-height: 120%;
+}
+    .about label1 {
+        font-weight: 800;
+        font-size: 40px;
+    }
+    .about label2 {
+        font-weight: 600;
+        font-size: 25px;
+    }
+    .about label3 {
+        font-size: 20px;
+        line-height: 2;
+    }
+/*used https://extract.pics/ as insperation, may change later though*/

@@ -1,25 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- Custom CSS file --> 
-        <link href="./styles.css" rel="stylesheet" type="text/css" />
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>File Upload </title>
-    </head>
-    <body>
+<head>
+    <!-- Custom CSS file -->
+    <link href="/css/styles.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Upload </title>
+</head>
+
+
+<body>
+
+
+
+    <div class="banner">
+        <br />Image Extractor<br />
+        <label>From any document, extract the images</label>
+        <br /><br />
+
         <form action="/multiple" method="POST" enctype="multipart/form-data">
-            <div class="input-group">
-                <label for="files">Select Files</label>
-                <input type="file" name="images" multiple />
+           
+            <div class="upload-container">
+                <input type="file" id="file_upload " name="images" multiple />
             </div>
-            <button class="submit-btn" type="submit">Upload</button>
+            
+            <div class="button-wrap">
+                <br />
+                <button class="upload-btn" onclick="uploadFiles()" type="submit">Extract</button>
+            </div>
         </form>
+
         <br><br>
-        <form action = '/download' method = "get" enctype ="multipart/form-data">
-            <button type = "submit">Download</button>
+        <form action='/download' method="get" enctype="multipart/form-data">
+            <button class="submit-btn" type="submit">Download</button>
         </form>
-        <script src="./server.js">
-        </script>
-    </body>
+    </div>
+
+    <div class="about">
+        <label1>About</label1>
+        <br /><br /><br />
+
+                    <label2> What is the Digital Humanities Project?</label2>
+        <br /><br />
+        <label3>Our project is to develop a web application that assists the humanities department parse historic documents for images and text. For researchers, the image extracting and document processing is time consuming and largely done manually. With this application, this step is automated saving valuable resources and time. Our goal for this project is for the application to receive images of historic documents such as book pages or newspapers to the web application, recognize and then extract the text and images using machine learning, and then send an archive of cropped images and interpreted text to the users. </label3>
+        <br /><br />
+
+        <label2> Contributors</label2>
+        <br /><br />
+              <label3>
+                  <i>We are team Snapshot!</i><br />
+                  Nuutti Barron, Da Yuen Kim, Michael Choi, Brandon Le, Aleksei Martynchik
+              </label3>
+        <br /><br />
+        <label2> Source Code</label2>
+        <br /><br />
+             <label3>
+                 <a href=https://github.com/cs130-w22/Group-B3> Visit our Github</a>
+              </label3>
+        <br /><br />
+    </div>
+
+
+
+    <script src="./server.js">
+    </script>
+</body>
 </html>

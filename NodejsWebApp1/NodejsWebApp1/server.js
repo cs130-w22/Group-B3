@@ -13,7 +13,7 @@ const port = 5000;
 const application = express();
 
 application.use(cors());
-application.use(express.static(path.join(__dirname, 'public')));
+application.use(express.static(path.join(__dirname, '/public')));
 
 
 const fileStorage = multer.diskStorage({
@@ -34,7 +34,7 @@ const upload = multer({ storage: fileStorage });
 // Multiple Files Route Handler
 application.post("/multiple", upload.any("images"), (req, res) => {
 	console.log(req.files);
-	res.send("Files Uploaded");
+	/*res.send("Files Uploaded");*/
 });
 
 //download portion
@@ -85,6 +85,25 @@ application.post("/compress", (req, res) => {
 });
 */
 //localhost 5000
+
+
+function uploadFiles() {
+	var files = document.getElementById('file_upload').files;
+	if (files.length == 0) {
+		alert("Please first choose or drop any file(s)...");
+		return;
+	}
+	var filenames = "";
+	for (var i = 0; i < files.length; i++) {
+		filenames += files[i].name + "\n";
+	}
+	alert("Selected file(s) :\n____________________\n" + filenames);
+}
+
+
 application.listen(port, () => {
 	console.log("Starting server at http://localhost:" + port);
 });
+
+
+

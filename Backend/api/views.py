@@ -19,14 +19,20 @@ def handle_post(request):
     #z_file.write(bytes)
     #z_file.close()
 
-    pipe = Pipeline()
-    sendzip = pipe.process_all(zbytes)
-    
+    pipe = Pipeline(zbytes)
+    sendzip = pipe.process_all()
 
     if request.content_type not in compressed_types:
         return bad_request()
     
-    return HttpResponse(sendzip) #zipfile
+    return HttpResponse(sendzip, headers={'Content-Type': 'application/zip'}) #zipfile
 
 def bad_request():
     return HttpResponseBadRequest('<h1>Invalid Request (400) </h1>', content_type='text/html')
+
+
+    '''
+    python ./manage.py makemigrations
+    python ./manage.py migrate
+    python ./manage.py runserver
+    '''

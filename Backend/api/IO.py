@@ -10,13 +10,22 @@ class IO:
     def __init__(self):
         pass
 
-    def create_zip(self, foldername):
-        with ZipFile('{}.zip'.format(foldername), 'w') as zfile:
-            for dirname, dirpath, filenames in os.walk(foldername):
-                zfile.write(dirname)
-                for filename in filenames:
-                    zfile.write('{}/{}'.format(dirname, filename))
-        self.delete_images(foldername)
+    def create_zip(self, images):
+        zip_buf = io.BytesIO()
+        with ZipFile(zip_buf, 'w') as zfile:
+            for img in images:
+                path_name = img.get_path()
+                
+                for crop in img.get_crops():
+                    i = 1
+                    image_byte = io.BytesIO()
+                    crop.save(image_byte, 'png')
+                    byte = image_byte.getvalue()
+                    
+                    zfile.writestr('./{}/{}.png'.format(path_name, i), byte)
+                    i += 1
+
+        return zip_buf.getvalue()
 
     def read_zip(self, zbytes):
         cv_images = []
@@ -39,9 +48,4 @@ class IO:
         pil = Image.fromarray(recolor)
         pil.filename = name
         return pil
-
-    def delete_images(self, foldername):
-        for file in os.listdir('./temp/{}'.format(foldername)):
-            os.remove('./temp/{}'.format(file))
-        os.remove('./temp/{}'.format(foldername))
 

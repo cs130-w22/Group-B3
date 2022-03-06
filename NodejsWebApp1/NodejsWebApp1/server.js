@@ -34,11 +34,32 @@ const upload = multer({ storage: fileStorage });
 // Multiple Files Route Handler
 application.post("/multiple", upload.any("images"), (req, res) => {
 	console.log(req.files);
+	var q = new admZip();
+	for (var i = 0; i < folder.length; i++) {
+		q.addLocalFile(__dirname + '/' + 'Images/' + folder[i])
+	}
+
+	fetch('http://127.0.0.1:8000/handlepost', {
+		method: 'POST',
+		body: q,
+	})
+		.then(response => response.blob())
+		.then(result => {
+			download(result);
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
+
 	/*res.send("Files Uploaded");*/
 });
 
-//download portion
+function download(result) {
+	res.set('Content-Disposition', `attachment; filename=${downName}`);
+	res.send(result)
+}
 
+/*
 application.get("/download", (req, res) => {
 	var q = new admZip();
 	for(var i = 0; i < folder.length; i++){
@@ -50,7 +71,7 @@ application.get("/download", (req, res) => {
 	res.set('Content-Disposition', `attachment; filename=${downName}`);
 	res.set('Content-Length', data.length);
 	res.send(data);
-})
+})*/
 
 //********** */
 //USELESS BUT WILL USE IF CURRENT ZIP DOWNLOAD IS NOT WHAT WE NEED

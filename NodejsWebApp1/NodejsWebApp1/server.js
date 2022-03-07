@@ -5,10 +5,13 @@ const cors = require("cors");// for http
 const res = require("express/lib/response");
 const fs = require("fs");
 const admZip = require("adm-zip");
+const fetch = require('node-fetch');
+const open = require("open");
+const FormData = require("form-data");
 
 const folder = fs.readdirSync(__dirname +'/'+'Images/');
 const downName = "ZippedPhotos.zip";
-const port = 5000;
+const port = 8700;
 
 const application = express();
 
@@ -33,19 +36,27 @@ const upload = multer({ storage: fileStorage });
 
 // Multiple Files Route Handler
 application.post("/multiple", upload.any("images"), (req, res) => {
-	console.log(req.files);
+	//console.log(req.files);
+	const formData = new FormData();
+
 	var q = new admZip();
 	for (var i = 0; i < folder.length; i++) {
-		q.addLocalFile(__dirname + '/' + 'Images/' + folder[i])
+		q.addLocalFile(__dirname + '/' + 'images/' + folder[i])
 	}
+	var data = q.toBuffer();
+	formData.append('data', data);
 
+	console.log(data);
+	//download(data);
+	open('http://127.0.0.1:8000/handlepost');
 	fetch('http://127.0.0.1:8000/handlepost', {
-		method: 'POST',
-		body: q,
+		method: 'POST',	
+		body: formData,
 	})
-		.then(response => response.blob())
+	
+		.then(response => response.content)
 		.then(result => {
-			download(result);
+			console.log(result);
 		})
 		.catch(error => {
 			console.error('Error:', error);
@@ -54,9 +65,14 @@ application.post("/multiple", upload.any("images"), (req, res) => {
 	/*res.send("Files Uploaded");*/
 });
 
-function download(result) {
-	res.set('Content-Disposition', `attachment; filename=${downName}`);
-	res.send(result)
+function download(data) {
+	console.log('....');
+	console.log(data);
+	console.log('.....');
+	//res.set('Content-Type', 'application.octet-stream');
+	//res.set('Content-Disposition', `attachment; filename=${downName}`);
+	//res.set('Content-Length', data.length);
+	res.send(data);
 }
 
 /*

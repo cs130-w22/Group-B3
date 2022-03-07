@@ -4,12 +4,13 @@ from PIL import Image
 import os, io
 import cv2
 import numpy as np
-from . import ImageInfo
+from . import ImageStruct
 
 class IO:
     def __init__(self):
         pass
 
+    #Takes a list of ImageStructs and outputs a Zipfile object of all the cropped images
     def create_zip(self, images):
         zip_buf = io.BytesIO()
         with ZipFile(zip_buf, 'w') as zfile:
@@ -27,8 +28,9 @@ class IO:
 
         return zip_buf.getvalue()
 
+    #Takes binary data of a zipfile and reads all files within the zipfile. 
     def read_zip(self, zbytes):
-        cv_images = []
+        images = []
         img_ext = ['.png', '.jpg', '.jpeg']
 
         with ZipFile(io.BytesIO(zbytes)) as zfile:
@@ -38,14 +40,7 @@ class IO:
                         if ext in img_file_path: 
                             bytes = ZipFile.read(zfile, name=img_file_path)
                             img = Image.open(io.BytesIO(bytes))
-                            cv_img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-                            cv_images.append(ImageInfo(cv_img, img_file_path))
+                            images.append(ImageStruct(img, img_file_path))
 
-        return cv_images
-
-    def create_image(self, cv_img, name):
-        recolor = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
-        pil = Image.fromarray(recolor)
-        pil.filename = name
-        return pil
+        return images
 

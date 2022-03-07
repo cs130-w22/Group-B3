@@ -1,5 +1,5 @@
-
-class ImageInfo:
+#image and crops are in PIL Image object form
+class ImageStruct:
     def __init__(self, img, fpath):
         self.path = fpath
         self.image = img

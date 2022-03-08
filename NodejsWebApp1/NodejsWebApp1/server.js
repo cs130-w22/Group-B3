@@ -6,8 +6,8 @@ const res = require("express/lib/response");
 const fs = require("fs");
 const admZip = require("adm-zip");
 
-const folder = fs.readdirSync(__dirname +'/'+'Images/');
-const downName = "ZippedPhotos.zip";
+const folder = fs.readdirSync(__dirname + '/' + 'Images/');
+const downFPath = "ZippedPhotos.zip";
 const port = 5000;
 
 const application = express();
@@ -32,38 +32,23 @@ application.get("/", (req, res) => {
 const upload = multer({ storage: fileStorage });
 
 // Multiple Files Route Handler
-application.post("/multiple", upload.any("images"), (req, res) => {
+application.post("/multiple", upload.any("Images"), (req, res) => {
 	console.log(req.files);
 	var q = new admZip();
 	for (var i = 0; i < folder.length; i++) {
 		q.addLocalFile(__dirname + '/' + 'Images/' + folder[i])
 	}
 
-	fetch('http://127.0.0.1:8000/handlepost', {
-		method: 'POST',
-		body: q,
-	})
-		.then(response => response.blob())
-		.then(result => {
-			download(result);
-		})
-		.catch(error => {
-			console.error('Error:', error);
-		});
-
-	/*res.send("Files Uploaded");*/
+	//post script download portion
+	res.send(downFPath);
 });
 
-function download(result) {
-	res.set('Content-Disposition', `attachment; filename=${downName}`);
-	res.send(result)
-}
-
+//download portion
 /*
 application.get("/download", (req, res) => {
 	var q = new admZip();
 	for(var i = 0; i < folder.length; i++){
-		q.addLocalFile(__dirname + '/' + 'Images/' + folder[i])
+		q.addLocalFile(__dirname + '/' + 'downImages/' + folder[i])
 	}
 
 	const data = q.toBuffer();
@@ -71,8 +56,8 @@ application.get("/download", (req, res) => {
 	res.set('Content-Disposition', `attachment; filename=${downName}`);
 	res.set('Content-Length', data.length);
 	res.send(data);
-})*/
-
+})
+*/
 //********** */
 //USELESS BUT WILL USE IF CURRENT ZIP DOWNLOAD IS NOT WHAT WE NEED
 //********** */
@@ -80,7 +65,6 @@ application.get("/download", (req, res) => {
 application.get('/compress', (req, res) => {
 	res.render('compress')
 })
-
 application.post("/compress", (req, res) => {
 	var zip = new admzip();
 	var output = Date.now() + "output.zip";
@@ -125,6 +109,3 @@ function uploadFiles() {
 application.listen(port, () => {
 	console.log("Starting server at http://localhost:" + port);
 });
-
-
-

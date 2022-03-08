@@ -1,4 +1,4 @@
-# Repository Template
+# Instructions
 
 Use Git Bash to clone the Github repository. Then install Node.js and Anaconda. Go to this link: https://ucla.box.com/s/07xh668tuspsycyhzbvlowpngmljcmov
 and download "ff.hd5" and put this file into the 'Backend' folder of your machine.

@@ -6,19 +6,24 @@ const res = require("express/lib/response");
 const fs = require("fs");
 const admZip = require("adm-zip");
 
+<<<<<<< Updated upstream
 const folder = fs.readdirSync(__dirname +'/'+'Images/');
 const downName = "ZippedPhotos.zip";
+=======
+const folder = fs.readdirSync('./images');
+const downFPath = "../../Backend/output_images/Crop.zip";
+>>>>>>> Stashed changes
 const port = 5000;
 
 const application = express();
+const shell = require('shelljs');
 
 application.use(cors());
 application.use(express.static(path.join(__dirname, '/public')));
 
-
 const fileStorage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, "./images"); //directory to where file is gonna be stored when uploaded
+		cb(null, "./Images"); //directory to where file is gonna be stored when uploaded
 	},
 	filename: (req, file, cb) => {
 		cb(null, file.originalname);
@@ -31,13 +36,44 @@ application.get("/", (req, res) => {
 
 const upload = multer({ storage: fileStorage });
 
+
 // Multiple Files Route Handler
+<<<<<<< Updated upstream
 application.post("/multiple", upload.any("images"), (req, res) => {
+=======
+application.post("/multiple", upload.any("Images"), (req, res) => {
+	
+>>>>>>> Stashed changes
 	console.log(req.files);
+
+	const zip = new admZip();
+	if(req.files){
+		req.files.map(file => {
+            zip.addLocalFile(file.path);
+        });
+
+		zip.writeZip('../../Backend/input_images/input.zip');
+	}
+	//zip(res);
+	shell.cd('../../Backend');
+	shell.exec('bash ./predict.sh');
+
+	res.download('./output_images/Crop.zip');
+	shell.cd('../NodejsWebApp1/NodejsWebApp1');
+/*
+	var zip2 = new admZip('../../Backend/output_images/Crop.zip');
+	const data = zip2.toBuffer();
+ 	res.set('Content-Type', 'application.octet-stream');
+ 	//res.set('Content-Disposition', `attachment; filename=${'Crop.zip'}`);
+ 	res.set('Content-Length', data.length);
+ 	res.send(data);
+	res.send(downFPath);*/
+	/*
 	var q = new admZip();
 	for (var i = 0; i < folder.length; i++) {
 		q.addLocalFile(__dirname + '/' + 'Images/' + folder[i])
 	}
+<<<<<<< Updated upstream
 
 	fetch('http://127.0.0.1:8000/handlepost', {
 		method: 'POST',
@@ -73,6 +109,29 @@ application.get("/download", (req, res) => {
 	res.send(data);
 })*/
 
+=======
+	q.writeZip('../../Backend/input_images/input.zip');
+	shell.exec('../Backend/predict.sh');
+	//post script download portion
+	res.send(downFPath);
+	*/
+});
+
+
+//download portion
+/*
+application.get("/download", (req, res) => {
+	var q = new admZip();
+	for (var i = 0; i < folder.length; i++) {
+		q.addLocalFile(__dirname + '/' + 'Images/' + folder[i])
+	}
+	q.writeZip('../../Backend/input_images/input.zip');
+	shell.exec('ls');
+	//post script download portion
+	//res.send(downFPath);
+})
+*/
+>>>>>>> Stashed changes
 //********** */
 //USELESS BUT WILL USE IF CURRENT ZIP DOWNLOAD IS NOT WHAT WE NEED
 //********** */
@@ -107,7 +166,7 @@ application.post("/compress", (req, res) => {
 */
 //localhost 5000
 
-
+/*
 function uploadFiles() {
 	var files = document.getElementById('file_upload').files;
 	if (files.length == 0) {
@@ -120,7 +179,7 @@ function uploadFiles() {
 	}
 	alert("Selected file(s) :\n____________________\n" + filenames);
 }
-
+*/
 
 application.listen(port, () => {
 	console.log("Starting server at http://localhost:" + port);

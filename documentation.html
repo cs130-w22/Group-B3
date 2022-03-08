@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Backend Documentation</title>
+</head>
+<body>
+
+    Our backend is composed of the following files and directories, located in <br />
+    the 'Backend' subdirectory <br /><br />
+
+    <ul>
+        <li>config.pickle</li>
+        <li>environment.yml</li>
+        <li>ff.hdf5</li>
+        <li>Frcnn_Model.py</li>
+        <li>ImageStruct.py</li>
+        <li>IO.py</li>
+        <li>main.py</li>
+        <li>Pipeline.py</li>
+        <li>predict.sh</li>
+        <li>Processor.py</li>
+        <li>keras_frcnn directory</li>
+        <li>LICENSE</li>
+    </ul><br />
+
+    More detailed descriptions of each is found below:
+
+    <ul>
+        <li>config.pickle: <br />
+        This file contains parameters used by Frcnn_Model.py <br /><br />
+        </li>
+        <li>environment.yml: <br />
+        This file specifies the environment in which this application runs. Some of the <br />
+        libraries we use require specific/older/depreciated versions in order to function <br />
+        and so this file contains all the information required to create this specific environemnt. <br /><br />
+        </li>
+        <li> ff.hdf5: <br />
+        This file contains all of the weights and parameters of the faster r-cnn deep learning model we use <br />
+        in order to detemrine the bounding boxes in a user submitted image. This file is used by the Frcnn_Model.py <br />
+        script. Replacing this file will in effect replace the weights of the model we use. <br /><br />
+        </li>
+        <li>Frcnn_Model.py: <br />
+        
+        This file spcifies the deep learning model object we use in order to determine bounding boxes in user
+        submitted images. It contains the following member functions: <br /><br />
+
+        - __init__(): initializes internal variables required to build the model<br /><br />
+        - get_bounding_boxes(image): This function takes in a cv2 array of an user submitted image scan, determines the bounding boxes <br />
+        for each of the pictures the model detects in the scan, and returns a list of coordinates in the form of <br />
+        (x_min, y_min, x_max, y_max) for each of these bounding boxes <br /><br />
+        - format_img_size(imgage, C): This function takes in an image as well as configuration information from 'config.pickle'<br />
+        and reformats it to fit the input of our model as specified by the configuration file. This returns the formatted image<br />
+        as well as the scaling factor from the raw image to the formatted image. <br /><br />
+        - format_img_channels(image, C): This is similar to the function above but formats image channels instead. <br /><br />
+        - format_img(img, C): This function formats a single image for model prediction. This is done simply by calling <br />
+        the two functions listed above. <br /><br />
+        - get_real_coordinates(ratio, x1, x2, y1, y2): This function takes in the bounding box coordinates the model predicts <br />
+        and sizer ratio from the raw image to the formatted image, and returns the coordinates of each corresponding bounding <br />
+        box in the raw input image. <br /><br />
+        - get_crops(image, boxes): This function takes in an image as well as a series of boxes (defined by pixel coordinates) <br />
+        and returns a list of cropped images<br /><br />
+        - convertPILtoCV(image): this function takes in a PIL formatted image, converts it to a cv2 image type, and returns this <br /><br />
+
+        Note: some of this code is modified from open source code that is publicly availible. Please read the 'keras_frcnn' section at the<br />
+        end of this page for more details. <br /><br />
+        </li>
+        <li>ImageStruct.py: <br />
+
+        This file specifies a structure we use to process image data in python. Each image is defined by <br />
+        three variables. The file path or location of the image, the pixel data in the form of an array <br />
+        and a list of cropped subimages. It is also consists of the following functions: <br /><br />
+
+        - __init__(image, filepath): Initializes the image structure anf file location, and sets the crop list top empty <br /><br />
+        - get_image(): returns the image pixel data <br /><br />
+        - get_path(): returns the filepath of the image <br /><br />
+        - get_crops(): returns the crops of the image <br /><br />
+        - set_crops(all_crops): sets the -crops- list to a set of crops found in the image <br /><br />
+        </li>
+        <li> IO.py: <br />
+
+        This file defines the 'IO' struct, which is used to handle input and output data. It contains the following functions <br />
+        <br />
+        - __init__(): does nothing, but initializes the instance of an IO object when called upon. <br /><br />
+        - create_zip(images): takes a list of images and create a zip archive containing all of these images. This archive is returned <br /><br />
+        - read_zip(path): takes a path to a file location of a zip archive containing images, and returns a list of images contianed in an ImageStruct <br /><br />
+        </li>
+        <li> main.py<br />
+
+        This file contains the main python script which is called when the user clicks the "upload" button. <br />
+        This script simply instantiates a Pipeline object and applies the pipeline to the user submitted image(s). <br /><br />
+
+
+        </li>
+        <li> Pipeline.py: <br />
+
+        This file defines the 'Pipeline' struct, which we use in order to process all of the user submitted data. <br /> 
+        A pipeline struct is defined by the following variables: <br />
+        - io: an instance of an IO struct <br />
+        - preprocessor: an instance of a Processor struct <br />
+        - model: an instance of our Frcnn_Model struct <br />
+        - image_struct: a list of images to process in the pipeline <br /><br />
+
+        The following member variables are contained in this struct as well: <br />
+        - process_all(): <br /><br />
+        - unzip_images(path): reads a zip file located at 'path' and unzips it, and returns the contents of that zip file <br /><br />
+        - crop(): for every image in image_struct, use 'model' to find the boudning boxes for pictures in the scanned image <br />
+        crop each of these bounding boxes, and the add each of these crops to each corresponding image's crop_list. <br /><br />
+        - zip_crops(): create a zip file with each of the image structures in image_struct <br /><br />
+
+        </li>
+        <li>predict.sh: <br />
+
+        This file specifies the environment that the backend runs on (based on information found in 'environment.yml') <br />
+        and runs the main python script. This script is executed when the user clicks the 'upload' button and uploads an image <br /><br />
+
+        </li>
+        <li>Processor.py: <br />
+
+        This file specifies the details of the 'Processor' class. It contains no memebr variables, but contains the following member <br />
+        functions. <br />
+        - preprocess_img(image): applies, greyscaling, thresholding, blurring, and resizing to the input image, and returns it. <br /><br />
+        - blur(image): applies a gaussian blur and returns the image <br /><br />
+        - greyscale(image): greyscales the input image and returns it <br /><br />
+        - threshold(image): applies thresholding to the input image and returns it <br /><br />
+        - resize(image, height, width): resizes the input image to the input height and width, and then returns the image <br /><br />
+        - regionOfConvergence(box1, box2): takes in two bounding boxes as input, determines the overlapping region, and returns <br />
+        the proportion of each box that overlaps the other as a tuple. <br /><br />
+        - processOverlap(image_boxes): this function takes in the coordinates of the bounding boxes in an image, determine the overlapping <br />
+        region of each, and if there is above a certain threshold of overlap, the box with lower confidence is removed. If confidence is equal, the <br /><br />
+        smaller box is removed. This function returns the coordinates of the filtered bounding boxes. <br /><br />
+        </li>
+        <li>
+            keras_frcnn: this directory contains a lot of files used to train and test the faster r-cnn deep learning model. These scripts were NOT <br />
+            produced by us, but are found from an open source repository at this link: https://github.com/kbardool/Keras-frcnn/tree/master/keras_frcnn. <br />
+            All credit for developing this code goes to the owners and maintainers of this repository, and not to any member of this project group. The following <br />
+            link also provides more details about this collection of code: https://www.analyticsvidhya.com/blog/2018/11/implementation-faster-r-cnn-python-object-detection/,<br />
+            and helped serve as a guide to developing the model we use to determine bounding boxes for our application. Please read the 'LICENSE' for further details. <br /><br />
+        </li>
+        <li>
+            LICENSE: contains distribution criteria for code modified or redistributed from that in keras_frcnn. 
+        </li>
+
+    </ul>
+    
+
+</body>
+</html>

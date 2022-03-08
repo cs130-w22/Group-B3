@@ -5,14 +5,9 @@ const cors = require("cors");// for http
 const res = require("express/lib/response");
 const fs = require("fs");
 const admZip = require("adm-zip");
-
-<<<<<<< Updated upstream
-const folder = fs.readdirSync(__dirname +'/'+'Images/');
-const downName = "ZippedPhotos.zip";
-=======
+//Constants
 const folder = fs.readdirSync('./images');
 const downFPath = "../../Backend/output_images/Crop.zip";
->>>>>>> Stashed changes
 const port = 5000;
 
 const application = express();
@@ -38,12 +33,8 @@ const upload = multer({ storage: fileStorage });
 
 
 // Multiple Files Route Handler
-<<<<<<< Updated upstream
-application.post("/multiple", upload.any("images"), (req, res) => {
-=======
 application.post("/multiple", upload.any("Images"), (req, res) => {
 	
->>>>>>> Stashed changes
 	console.log(req.files);
 
 	const zip = new admZip();
@@ -73,43 +64,6 @@ application.post("/multiple", upload.any("Images"), (req, res) => {
 	for (var i = 0; i < folder.length; i++) {
 		q.addLocalFile(__dirname + '/' + 'Images/' + folder[i])
 	}
-<<<<<<< Updated upstream
-
-	fetch('http://127.0.0.1:8000/handlepost', {
-		method: 'POST',
-		body: q,
-	})
-		.then(response => response.blob())
-		.then(result => {
-			download(result);
-		})
-		.catch(error => {
-			console.error('Error:', error);
-		});
-
-	/*res.send("Files Uploaded");*/
-});
-
-function download(result) {
-	res.set('Content-Disposition', `attachment; filename=${downName}`);
-	res.send(result)
-}
-
-/*
-application.get("/download", (req, res) => {
-	var q = new admZip();
-	for(var i = 0; i < folder.length; i++){
-		q.addLocalFile(__dirname + '/' + 'Images/' + folder[i])
-	}
-
-	const data = q.toBuffer();
-	res.set('Content-Type', 'application.octet-stream');
-	res.set('Content-Disposition', `attachment; filename=${downName}`);
-	res.set('Content-Length', data.length);
-	res.send(data);
-})*/
-
-=======
 	q.writeZip('../../Backend/input_images/input.zip');
 	shell.exec('../Backend/predict.sh');
 	//post script download portion
@@ -131,7 +85,6 @@ application.get("/download", (req, res) => {
 	//res.send(downFPath);
 })
 */
->>>>>>> Stashed changes
 //********** */
 //USELESS BUT WILL USE IF CURRENT ZIP DOWNLOAD IS NOT WHAT WE NEED
 //********** */

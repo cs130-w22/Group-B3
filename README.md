@@ -10,11 +10,12 @@ This will install all the necessary libraries. After installation, the server wi
 # How to Run
 
 ## Setup
-On initial start up run the following command:
+On initial start up run the following command in the Group-B3 directory:
 ```
 ./setup.sh
 ```
-Then go into the Backend folder and run the setup for the environment required to run the model:
+This will automatically run the setup for the environment required to run the model. But if that doesn't work as intended, 
+you can manually setup the Backend modules by running the following commands: 
 ```
 cd Backend
 ./setupBack.sh

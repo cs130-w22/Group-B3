@@ -51,11 +51,11 @@ class Processor:
                 roc = self.regionOfConvergence(img_boxes[i][0], img_boxes[j][0])
 
                 if roc[0] >= 0.5 or roc[1] >= 0.5:
-                    if img_boxes[i][1] >= img_boxes[j][1]: #if confidence of box i > box j
+                    if img_boxes[i][1] > img_boxes[j][1] or (img_boxes[i][1] == img_boxes[j][1] and roc[0] > roc[1]): #if confidence of box i > box j
                         img_boxes.remove(img_boxes[j])   
                     else:
                         img_boxes.remove(img_boxes[i])
-                        j = i+1 
+                        j = i+1
                 else:
                     j += 1
             i += 1            

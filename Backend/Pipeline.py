@@ -9,14 +9,13 @@ class Pipeline:
         self.path = "./input_images/input.zip"
         self.preprocessor = Processor()
         self.model = Frcnn_Model()
-        self.image_struct = []
+        self.image= []
 
 
     def process_all(self):
-        self.image_struct = self.unzip_images(self.path)
-        self.crop()
-
-        self.zip_crops()
+        for zipimg in self.io.read_zip(self.path):
+            self.crop(zipimg)
+            self.zip_crops(zipimg)
 
     # unzip images from a zip file with path path into a list of ImageStruct
     def unzip_images(self, path):
@@ -28,19 +27,18 @@ class Pipeline:
     
 
     #Takes the list of ImageStruct and crops out all photos within the images and sets it as a list in ImageStruct
-    def crop(self):
-        for image in self.image_struct:
-            img = image.get_image()
-            print(img)
-            crops = self.model.get_bouding_boxes(img)
-            print(crops) # crops = [((x,y,x,y), c), ...]
-            coordCrop = self.preprocessor.processOverlap(crops) #coordCrop = [(x,y, x,y), ...]
-            cropped_img = self.model.get_crops(img, coordCrop)
-            image.set_crops(cropped_img)   
+    def crop(self, c_img):
+        img = c_img.get_image()
+        print(img)
+        crops = self.model.get_bouding_boxes(img)
+        print(crops) # crops = [((x,y,x,y), c), ...]
+        coordCrop = self.preprocessor.processOverlap(crops) #coordCrop = [(x,y, x,y), ...]
+        cropped_img = self.model.get_crops(img, coordCrop)
+        c_img.set_crops(cropped_img)   
 
     #Creates zip file from list of ImageStructs
-    def zip_crops(self):
-        return self.io.create_zip(self.image_struct)
+    def zip_crops(self, c_img):
+        return self.io.create_zip(c_img)
 
 
 

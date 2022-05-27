@@ -6,3 +6,28 @@ and download "ff.hd5" and put this file into the 'Backend' folder of your machin
 Change directories to "Group-B3/NodejsWebApp1/NodejsWebApp1/" then run the install.sh bash script.
 
 This will install all the necessary libraries. After installation, the server will run and proceed to http://localhost:5000/ where you will be able to use the application.
+
+# How to Run
+
+## Setup
+On initial start up run the following command:
+```
+./setup.sh
+```
+Then go into the Backend folder and run the setup for the environment required to run the model:
+```
+cd Backend
+./setupBack.sh
+cd ..
+```
+After running the setup shell scripts once you don't need to run it again to start the program.
+
+## Program Start
+You can start the program by running the following command in the command line
+```
+./run.sh
+```
+
+## Custom Weights
+You can run the model using your own weights by replacing the weight file in the Backend directory. The weight file should be named [ff.hdf5]
+
